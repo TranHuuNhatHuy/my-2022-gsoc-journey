@@ -1,14 +1,14 @@
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Starter Blog`,
+    title: `My 2022 Google Summer of Code - Tran Huu Nhat Huy`,
     author: {
-      name: `Kyle Mathews`,
-      summary: `who lives and works in San Francisco building useful things.`,
+      name: `Tran Huu Nhat Huy`,
+      summary: `- currently Tokyo Tech B3 student, enjoying sadistic experience of coding and developing things.`,
     },
-    description: `A starter blog demonstrating what Gatsby can do.`,
-    siteUrl: `https://gatsbystarterblogsource.gatsbyjs.io/`,
+    description: `GSOC 2022 progress of Tran Huu Nhat Huy.`,
+    siteUrl: `https://https://gsoc2022tranhuunhathuy.gatsbyjs.io/`,
     social: {
-      twitter: `kylemathews`,
+      linkedin: `tranhuunhathuy`,
     },
   },
   plugins: [
