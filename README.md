@@ -2,5 +2,5 @@
 <p align="center">
   Blog URL: https://gsoc2022tranhuunhathuy.gatsbyjs.io/
   <br>
-  Powered by <a href="https://www.gatsbyjs.com">Gatsby</a>
+  Powered by <a href="https://github.com/gatsbyjs/gatsby-starter-blog">Gatsby</a>
 </p>
