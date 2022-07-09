@@ -1,5 +1,5 @@
 ---
-title: First week - Spectra gazing and initial fitting module
+title: First week - Spectra gazing and initial ideas for fitting module
 date: "2022-06-19"
 description: "First dive into the actual spectra, as well as the world of
 fitting and optimization using LMFIT."
