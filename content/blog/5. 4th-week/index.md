@@ -68,25 +68,25 @@ In this list, there are 5 methods - `newton`, `trust-ncg`, `trust_exact`, `trust
 
 The result for this method-comparing benchmark can be found in [this JSON file](./method_comparison.txt).
 
-| Method                 | Last residual         | Number of loops | Processing time (s) |
-| :--------------------- | :-------------------: | :-------------- | :-----------:       |
-| leastsq                | 0.0027299042272073103 | 17              | 6.128568887710571   |
-| least_squares          | 0.0027299046347610202 | 14              | 3.8792104721069336  |
-| differential_evolution | 0.0027299042330808853 | 48              | 7.211840629577637   |
-| brute                  | 0.002784721834568091  | 20              | 3.13600492477417    |
-| basinhopping           | 0.003047172548222827  | 201             | 31.650216579437256  |
-| ampgo                  | 0.002730133209493655  | 201             | 36.60996413230896   |
-| nelder                 | 0.0027299042330808853 | 48              | 7.532714605331421   |
-| lbfgsb                 | 0.002729904381527972  | 12              | 1.8955962657928467  |
-| powell                 | 0.0027299042271944525 | 38              | 6.310025691986084   |
-| cg                     | 0.002729904692232839  | 34              | 5.223567724227905   |
-| cobyla                 | 0.0027299044752413077 | 22              | 3.028048515319824   |
-| bfgs                   | 0.002729904235170728  | 20              | 2.9560532569885254  |
-| tnc                    | 0.0027299042284574205 | 36              | 5.905533313751221   |
-| trust-constr           | 0.0027299042271945353 | 16              | 2.3700413703918457  |
-| slsqp                  | 0.0027299969016334855 | 18              | 3.160074472427368   |
-| shgo                   | 0.002729904227233636  | 32              | 6.185185194015503   |
-| dual_annealing         | 0.02216192419896799   | 201             | 32.40411591529846   |
+| Method                 | Last residual   | Number of loops | Processing time (s) |
+| :--------------        | :-------------: | :-------:       | :-----------:       |
+| leastsq                | 0.0027299042272 | 17              | 6.128568887710571   |
+| least_squares          | 0.0027299046347 | 14              | 3.8792104721069336  |
+| differential_evolution | 0.0027299042330 | 48              | 7.211840629577637   |
+| brute                  | 0.0027847218345 | 20              | 3.13600492477417    |
+| basinhopping           | 0.0030471725482 | 201             | 31.650216579437256  |
+| ampgo                  | 0.0027301332094 | 201             | 36.60996413230896   |
+| nelder                 | 0.0027299042330 | 48              | 7.532714605331421   |
+| lbfgsb                 | 0.0027299043815 | 12              | 1.8955962657928467  |
+| powell                 | 0.0027299042271 | 38              | 6.310025691986084   |
+| cg                     | 0.0027299046922 | 34              | 5.223567724227905   |
+| cobyla                 | 0.0027299044752 | 22              | 3.028048515319824   |
+| bfgs                   | 0.0027299042351 | 20              | 2.9560532569885254  |
+| tnc                    | 0.0027299042284 | 36              | 5.905533313751221   |
+| trust-constr           | 0.0027299042271 | 16              | 2.3700413703918457  |
+| slsqp                  | 0.0027299969016 | 18              | 3.160074472427368   |
+| shgo                   | 0.0027299042272 | 32              | 6.185185194015503   |
+| dual_annealing         | 0.0221619241989 | 201             | 32.40411591529846   |
 
 _(It is important to remember that this result might differ for each run, but rest assure the common trend is unchanged)_
 
@@ -98,4 +98,4 @@ If we zoom in the best 8 cases marked by the red rectangle above:
 
 ![Best 8](./result_zoomed.png)
 
-In the zoomed version, we can see that, 
+In the zoomed figure, the result is quite good as I expected. The two most usually used methods, `lbfgsb` and `least_squares`, are competing each other.
