@@ -98,4 +98,11 @@ If we zoom in the best 8 cases marked by the red rectangle above:
 
 ![Best 8](./result_zoomed.png)
 
-In the zoomed figure, the result is quite good as I expected. The two most usually used methods, `lbfgsb` and `least_squares`, are competing each other.
+In the zoomed figure, the result is quite satisfying as I expected. When we talk about the most famous curve-fitting algorithms, we can mention either `leastsq`/`least_squares` or `bfgs`/`lbfgsb`, and now we can see them taking 4 out of top 5. Now let's focus on the two competitors: `lbfgsb` and `least_squares` and get some observations:
+
+- `lbfgsb` has a little lower residual and so a little bit better in accuracy than `least_squares`.
+- Although approximately same fitting loops (12 and 14), the time required for `lbfgsb` is 1.895596s, significantly lower than `least_squares` of 3.879210s. We can also see this behavior in their neighbors: `bfgs` (2.956053s) < `leastsq` (6.128569s).
+
+This is explainable. While `least_squares` simply calculating and minimizing the sum of the residuals of points from the comparative curves, `lbfgsb` - Limited-memory BFGS uses a limited amount of computer memory to conduct [Broyden-Fletcher-Goldfarb-Shanno algorithm](https://en.wikipedia.org/wiki/Broyden%E2%80%93Fletcher%E2%80%93Goldfarb%E2%80%93Shanno_algorithm) for the minimization. So for now, I have initial assumption that `lbfgsb` performs best, both in accuracy and processing time. I will confirm this trends in other LTE experimental spectra I have.
+
+### 2. `
