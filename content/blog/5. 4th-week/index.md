@@ -123,13 +123,13 @@ For each spectra, I will modify the pipeline's `method` and `normalize` properti
 
 | Spec No. | GT Temp | Start Temp | Best Temp | Method    | Normalize | Diff         |
 | :------: | :-----: | :--------: | :-------: | :----:    | :-------: | :----------: |
-| 1        | 1500    | 1300       | 1468.97   | `lbfgsb`  | false     | [1](./1.png) |
-| 2        | 900     | 1300       | 898.84    | `lbfgsb`  | false     | [2](./2.png) |
-| 3        | 740     | 1000       | ~740      | both      | false     | [3](./3.png) |
-| 4        | 3000    | 2850       | 3003.52   | `leastsq` | false     | [4](./4.png) |
-| 5        | 1500    | 2000       | 1507.25   | `leastsq` | true      | [5](./5.png) |
-| 6        | 1000    | 2250       | 994.90    | `leastsq` | false     | [6](./6.png) |
-| 7        | 298.15  | 660        | 297.86    | `leastsq` | false     | [7](./7.png) |
+| 1        | 1500    | 1300       | 1468.97   | `lbfgsb`  | false     | [1](https://raw.githubusercontent.com/TranHuuNhatHuy/my-2022-gsoc-journey/master/content/blog/5.%204th-week/1.png) |
+| 2        | 900     | 1300       | 898.84    | `lbfgsb`  | false     | [2](https://raw.githubusercontent.com/TranHuuNhatHuy/my-2022-gsoc-journey/master/content/blog/5.%204th-week/2.png) |
+| 3        | 740     | 1000       | ~740      | both      | false     | [3](https://raw.githubusercontent.com/TranHuuNhatHuy/my-2022-gsoc-journey/master/content/blog/5.%204th-week/3.png) |
+| 4        | 3000    | 2850       | 3003.52   | `leastsq` | false     | [4](https://raw.githubusercontent.com/TranHuuNhatHuy/my-2022-gsoc-journey/master/content/blog/5.%204th-week/4.png) |
+| 5        | 1500    | 2000       | 1507.25   | `leastsq` | true      | [5](https://raw.githubusercontent.com/TranHuuNhatHuy/my-2022-gsoc-journey/master/content/blog/5.%204th-week/5.png) |
+| 6        | 1000    | 2250       | 994.90    | `leastsq` | false     | [6](https://raw.githubusercontent.com/TranHuuNhatHuy/my-2022-gsoc-journey/master/content/blog/5.%204th-week/6.png) |
+| 7        | 298.15  | 660        | 297.86    | `leastsq` | false     | [7](https://raw.githubusercontent.com/TranHuuNhatHuy/my-2022-gsoc-journey/master/content/blog/5.%204th-week/7.png) |
 
 As we can see from the table above:
 
