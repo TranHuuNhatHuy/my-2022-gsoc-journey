@@ -1,119 +1,72 @@
 ---
-title: Fifth week - Major updates on literally everything, and non-LTE benchmarking
+title: Fifth week - Major updates on literally everything, and Non-LTE spectra
 date: "2022-07-17"
 description: With his success in LTE benchmarking as the fitting module run smoothly and pumped out beautiful fit results, Tran now happily moves to the non-LTE benchmarking. He also receives various helpful reviews and suggestions from his mentors, and so the fitting module keeps being developed...
 ---
 
-[JSON sample](./JSON_sample.json)
+In this week, I bring upon a major update that includes literally everything: from the current JSON structure, to the fitting module and its accompanied models, as well as to add the final part of LTE spectra benchmarking result, hence completing my work on LTE spectra, and continue my work on non-LTE spectra.
 
- ### 1. Fitting method benchmarking
+ ### 1. JSON structure
 
- The ideal of benchmarking result is to test and assess under what conditions, such as fitting method, pipeline, refinement, etc., the fitting process can achieve a stable and robust result. Firstly, I want to test the fitting method and see which ones are the best to put into the module as the default method. As we use LMFIT.Minimizer, we have 23 fitting methods in total:
+ As you know, in previous structure, the properties relevant to fitting pipeline (`cutoff`, `slit`, `normalize`, etc.) are hard-coded into the module. This new JSON structure will grant users more flexibility in defining their fitting pipeline. For example, this is a new JSON structure:
 
-- `leastsq`: Levenberg-Marquardt (default).
-- `least_squares`: Least-Squares minimization, using Trust Region Reflective method.
-- `differential_evolution`: differential evolution.
-- `brute`: brute force method.
-- `basinhopping`: Basin-hopping method.
-- `ampgo`: Adaptive Memory Programming for Global Optimization.
-- `nelder`: Nelder-Mead.
-- `lbfgsb`: Limited-memory Broyden–Fletcher–Goldfarb–Shanno (L-BFGS-B).
-- `powell`: Powell's method.
-- `cg`: Conjugate-Gradient.
-- `newton`: Newton-Conjugate-Gradient.
-- `cobyla`: Cobyla.
-- `bfgs`: Broyden–Fletcher–Goldfarb–Shanno (BFGS).
-- `tnc`: Truncated Newton.
-- `trust-ncg`: Newton-Conjugate-Gradient trust-region.
-- `trust-exact`: nearly exact trust-region.
-- `trust-krylov`: Newton's Generalized Lanczos Trust-Region (GLTR).
-- `trust-constr`: trust-region for constrained optimization.
-- `dogleg`: Dog-leg trust-region.
-- `slsqp`: Sequential Linear Squares Programming.
-- `emcee`: Maximum likelihood via Monte-Carlo Markov Chain.
-- `shgo`: Simplicial Homology Global Optimization.
-- `dual_annealing`: Dual Annealing optimization.
+ ````json
+ {
+  "fileName": "CO2_measured_spectrum_4-5um.spec",
+  "molecule": "CO2",
+  "isotope": "1,2",
+  "wmin": 4167,
+  "wmax": 4180,
+  "wunit": "nm",
+  "pressure": 5e-3,
+  "mole_fraction": 1,
+  "path_length": 10,
+  "cutoff": 1e-25,
+  "wstep": 0.001,
+  "fit": {
+    "Tgas": [1000, 2000]
+  },
+  "pipeline": {
+    "method": "leastsq",
+    "fit_var": "radiance",
+    "normalize": true,
+    "max_loop": 100
+  },
+  "modeling": {
+    "offset": "-0.2 nm",
+    "slit": "1.4 nm"
+  }
+}
+ ````
 
-In this list, there are 5 methods - `newton`, `trust-ncg`, `trust_exact`, `trust-krylov` and `dogleg` - that require Jacobian function to work, which adds more complexity into our fitting process and codebase, hence I remove them from the benchmark and never use them again. There are also `emcee` method that, for some unknown reasons, the fitting procedure never stops even after passing the loop limit, thus I have to remove it. Now we have 17 methods left that are stable enough to compare. Additionally, I set the max number of fitting loops as 200, so this means that any method that have equal of higher than 200 loops means that they are most likely unable to stop. I will conduct benchmarking process on the `CO2_measured_spectrum_4-5um.spec` first.
+As we can see, there are 2 new key sections in the structure:
 
-The result for this method-comparing benchmark can be found in [this JSON file](./method_comparison.txt).
+- `pipeline` : including features for refinement of experimental spectrum after it is collected, such as:
+    - `method` : (optional) preferred fitting method from the 17 confirmed methods of LMFIT stated in week 4 blog. `leastsq` by default.
+    - `fit_var` : (optional) spectral quantity to be extracted for fitting process, such as `radiance`, `absorbance`, etc. If not stated, it will take the first spectral quantity contained inside the experimental spectrum, assuming it only has one.
+    - `normalize` : (required) if `True`, normalize both experimental and model spectra for each fitting loop, else no.
+    - `max_loop` : (optional) maximum number rof fitting loops allowed. 100 by default.
+    - `tol` : (optional) max fitting tolerance, only applicable if `method == "lbfgsb"` because this is an exclusive feature to L-BFSG-B algorithm.
+- `modeling` : including features for refinement of model spectra during fitting loops, such as:
+    - `offset` : (optional) for applying offset. There must be a blank space separating offset amount and unit.
+    - `slit` : (optional) for applying slit. There must be a blank space separating slit amount and unit.
 
-| Method                 | Last residual   | Number of loops | Processing time (s) |
-| :--------------        | :-------------: | :-------:       | :-----------:       |
-| leastsq                | 0.0027299042272 | 17              | 6.128568887710571   |
-| least_squares          | 0.0027299046347 | 14              | 3.8792104721069336  |
-| differential_evolution | 0.0027299042330 | 48              | 7.211840629577637   |
-| brute                  | 0.0027847218345 | 20              | 3.13600492477417    |
-| basinhopping           | 0.0030471725482 | 201             | 31.650216579437256  |
-| ampgo                  | 0.0027301332094 | 201             | 36.60996413230896   |
-| nelder                 | 0.0027299042330 | 48              | 7.532714605331421   |
-| lbfgsb                 | 0.0027299043815 | 12              | 1.8955962657928467  |
-| powell                 | 0.0027299042271 | 38              | 6.310025691986084   |
-| cg                     | 0.0027299046922 | 34              | 5.223567724227905   |
-| cobyla                 | 0.0027299044752 | 22              | 3.028048515319824   |
-| bfgs                   | 0.0027299042351 | 20              | 2.9560532569885254  |
-| tnc                    | 0.0027299042284 | 36              | 5.905533313751221   |
-| trust-constr           | 0.0027299042271 | 16              | 2.3700413703918457  |
-| slsqp                  | 0.0027299969016 | 18              | 3.160074472427368   |
-| shgo                   | 0.0027299042272 | 32              | 6.185185194015503   |
-| dual_annealing         | 0.0221619241989 | 201             | 32.40411591529846   |
+Also, this update brings forth new available syntaxes for the fit parameters. For each fit parameter stated in `fit`, for example, `Tgas`:
 
-_(It is important to remember that this result might differ for each run, but rest assure the common trend is unchanged)_
+- If `Tgas` is numeric (for example, `Tgas = 1350`) : take this as initial value, with a default bounding width of 500 (so in this case bounding range is [850 , 1850].
+- If `Tgas` is either `list` or `tuple` (for example, `Tgas = [1200, 1600]`) : take this as initial bounding range, and the initial value will be the range's midpoint (so in this case initial value is 1400).
+- (not yet implemented) If Tgas is a string (for example, `Tgas = "2*Trot`) : take this as dynamic expression and use DynVar of Fitroom. I will try to implement this idea as soon as possible.
 
-As you can see from the data above, we have `basinhopping`, `ampgo` and `dual_annealing` jumping out of the loop limit of 200, and it's totally not a good thing, which I would like to exclude them out for the sake of better visualization. Then, in order to compare the rest of 14 methods, I have a scatter plot below in which I focus on analyzing the `last_residual` - indicator of accuracy - on the horizontal axis, and `loops` - indicator of fitting iterations needed - on the vertical axis. As `time` is heavily influenced by the computational capacity of each device, I don't prioritize it than other two criteria in the result assessment, and thus it is indicated by color code.
+Other properties will be parsed directly to [SpectrumFactory object](https://radis.readthedocs.io/en/latest/source/radis.lbl.factory.html#radis.lbl.factory.SpectrumFactory) which means the users will have to refer to the class syntax (but a pre-made JSON form will be provided later with full instructions from me, so don't worry, it's quite user-friendly).
 
-![Scatter plot of the result.](./result_plot.png)
+These major changes in JSON structure (and how it is parsed in fitting module) will allow much greater freedom for users to adjust fitting properties.
 
-If we zoom in the best 8 cases marked by the red rectangle above:
+### 2. Fitting module
 
-![Best 8](./result_zoomed.png)
+Instead of calling `calc_spectrum()` in every fitting loop, now the new module will generate a `SpectrumFactory` object before commencing the fitting loops. This will save a significant time in reloading the database, as well as keeping the source code organized thoroughly.
 
-In the zoomed figure, the result is quite satisfying as I expected. When we talk about the most famous curve-fitting algorithms, we can mention either `leastsq`/`least_squares` or `bfgs`/`lbfgsb`, and now we can see them taking 4 out of top 5. Now let's focus on the two competitors: `lbfgsb` and `least_squares` and get some observations:
+The new fitting module also supports new JSON structure, and makes sure to parse its information correctly, aiming to limit user-errors. So now we can have 2 ways of input: either through in-script `JSON` structures, or through an external `JSON` file. The former approach seems better, so from now I will focus more on this.
 
-- `lbfgsb` has a little lower residual and so a little bit better in accuracy than `least_squares`.
-- Although approximately same fitting loops (12 and 14), the time required for `lbfgsb` is 1.895596s, significantly lower than `least_squares` of 3.879210s. We can also see this behavior in their neighbors: `bfgs` (2.956053s) < `leastsq` (6.128569s).
+### 3. Non-LTE benchmarking
 
-This is explainable. While `least_squares` simply calculating and minimizing the sum of the residuals of points from the comparative curves, `lbfgsb` - Limited-memory BFGS uses a limited amount of computer memory to conduct [Broyden-Fletcher-Goldfarb-Shanno algorithm](https://en.wikipedia.org/wiki/Broyden%E2%80%93Fletcher%E2%80%93Goldfarb%E2%80%93Shanno_algorithm) for the minimization.
-
-So for now, I have initial assumption that `lbfgsb` performs slightly better than `leastsq`. After conducting fitting process on other spectra, the `lbfgsb` and `leastsq` are seem to be dominant in terms of speed (based on number of loops and time elapsed) and accuracy (this depends a little bit on pipeline combination, which will be addressed in next part) compared to other methods. However, more benchmarks are needed to confirm my initla assumption.
-
-### 2. Fitting pipeline comparison
-
-Next is the benchmarking process focusing on pipeline comparison. A fitting pipeline comprises of several options, from spectrum refinement methods such as which spectral quantity to take, whether applying normalization on both spectra or not, or simply just fitting process preferences such as maxinum number of fitting loops allowed, or fitting method, or max fitting tolerance. While in the new JSON structure the users are free to adjust all of them, through this benchmarking process I would like acquire more understandings about how these pipeline might affect the quality of a fitting work.
-
-In order to assess a fitting's quality, I use the synthetic spectra that I generated on week 1. Although they are heavily convoluted with noises and offsets, since they are software-generated, we can know what are the experimental properties (such as `path_length`, `slit`, etc.). Meanwhile, regarding the experimental spectrum `CO2_measured_spectrum_4-5um`, we are definitely not sure those parameters (in fact, we don't even know whether it is LTE or non-LTE). So, I decided to test on 7 synthetic spectra:
-
-1. `synth-CO-1-1800-2300-cm-1-P3-t1500-v-r-mf0.1-p1-sl1nm.spec`
-2. `synth-CO2-1-500-1100-cm-1-P2-t900-v-r-mf0.5-p1-sl1nm.spec`
-3. `synth-CO2-1-500-3000-cm-1-P93-t740-v-r-mf0.96-p1-sl1nm.spec`
-4. `synth-CO2-1-3300-3700-cm-1-P0.005-t3000-v-r-mf0.01-p1-sl1.4nm.spec`
-5. `synth-H2O-1-1000-2500-cm-1-P0.5-t1500-v-r-mf0.5-p1-sl1nm.spec`
-6. `synth-NH3-1-500-2000-cm-1-P10-t1000-v-r-mf0.01-p1-sl1nm.spec`
-7. `synth-O2-1-7500-8000-cm-1-P1.01325-t298.15-v-r-mf0.21-p1-sl1nm.spec`
-
-For each spectra, I will modify the pipeline's `method` and `normalize` properties, until the best possible fitting result is achieved - least fitting loops, and closest to the ground-truth (GT) temperature (this is why I prefer synthetic over experimental spectra, as I explained above). Here is the result:
-
-| Spec No. | GT Temp | Start Temp | Best Temp | Method    | Normalize | Diff         |
-| :------: | :-----: | :--------: | :-------: | :----:    | :-------: | :----------: |
-| 1        | 1500    | 1300       | 1468.97   | `lbfgsb`  | false     | [1](https://raw.githubusercontent.com/TranHuuNhatHuy/my-2022-gsoc-journey/master/content/blog/5.%204th-week/1.png) |
-| 2        | 900     | 1300       | 898.84    | `lbfgsb`  | false     | [2](https://raw.githubusercontent.com/TranHuuNhatHuy/my-2022-gsoc-journey/master/content/blog/5.%204th-week/2.png) |
-| 3        | 740     | 1000       | ~740      | both      | false     | [3](https://raw.githubusercontent.com/TranHuuNhatHuy/my-2022-gsoc-journey/master/content/blog/5.%204th-week/3.png) |
-| 4        | 3000    | 2850       | 3003.52   | `leastsq` | false     | [4](https://raw.githubusercontent.com/TranHuuNhatHuy/my-2022-gsoc-journey/master/content/blog/5.%204th-week/4.png) |
-| 5        | 1500    | 2000       | 1507.25   | `leastsq` | true      | [5](https://raw.githubusercontent.com/TranHuuNhatHuy/my-2022-gsoc-journey/master/content/blog/5.%204th-week/5.png) |
-| 6        | 1000    | 2250       | 994.90    | `leastsq` | false     | [6](https://raw.githubusercontent.com/TranHuuNhatHuy/my-2022-gsoc-journey/master/content/blog/5.%204th-week/6.png) |
-| 7        | 298.15  | 660        | 297.86    | `leastsq` | false     | [7](https://raw.githubusercontent.com/TranHuuNhatHuy/my-2022-gsoc-journey/master/content/blog/5.%204th-week/7.png) |
-
-As we can see from the table above:
-
-- All spectra achieve near-perfect best fit results. This is because we have perfect ground-truth conditions. In real-life circumstances, such accurate ground-truth is virtually impossible to achieve, but this is the job of fitting users to measure and set them.
-- `leastsq` performs quite good in most case. This is quite surprising after the result from `CO2_measured_spectrum_4-5um.spec`, but it can be explained as most likely we didn't use the correct ground-truth conditions for it since we don't know (seriously, who created that spectrum?). However, there is a small observation from me that, those cases where `lbfgsb` lost agains `leastsq` were primarily because of number of loops. Still, it's a win for `leastsq`.
-- Their neighbors, `least_squares` and `bfgs`, are completely underdogs. We don't even need to mention other methods.
-- In nearly all the best cases, `normalize = false` is set. This is quite explainable, the more originality the better.
-
-### 3. Summary
-
-After all the benchmarking works above, I have decided to set the `leastsq` as the default fitting method, in case users don't state the method explicitly in JSON file. Later on, in the fitting tutorial, I will add some suggestions about using `lbfgsb` and trying to switch the `normalize` in case their fitting work is not quite good.
-
-Nevertheless, these benchmarks helped me gain more insights about the performance of my fitting module, and most importantly, let me experience the feeling of a spectroscopist trying to fit his spectra - playing around the parameters, adjusting parameters and praying for a good result to come. Quite a physically and mentally exhausting work to be honest, since whenever the result went wrong, I didn't know whether the error came from ground-truth conditions, or from my fitting module. There have been days and nights I sat in front of my laptop adjusting the JSON files and codebase continuously. But finally, the benchmarking process for LTE spectra is good now, and I am quite confident in my fitting module. Now let's move on to the non-LTE spectra!
-
-![A footage of me turning parameters up and down like a DJ](./meme.jpg)
+According to the benchmarking result, it seems that `leastsq` and `lbfgsb` continue to dominate the overall performance ranking. Compared to LTE, non-LTE cases are usually longer and require more iterations to finish (of course, they have more fitting parameters). After all, I have decided to set the `leastsq` as the default universal fitting method for all cases, in case users don't state the method explicitly in JSON file. Later on, in the fitting tutorial, I will add some suggestions about using `lbfgsb` and trying to switch the `normalize` in case their fitting work is not quite good.
