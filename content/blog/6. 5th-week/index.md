@@ -65,7 +65,7 @@ These major changes in JSON structure (and how it is parsed in fitting module) w
 
 Instead of calling `calc_spectrum()` in every fitting loop, now the new module will generate a `SpectrumFactory` object before commencing the fitting loops. This will save a significant time in reloading the database, as well as keeping the source code organized thoroughly.
 
-The new fitting module also supports new JSON structure, and makes sure to parse its information correctly, aiming to limit user-errors. So now we can have 2 ways of input: either through in-script `JSON` structures, or through an external `JSON` file. The former approach seems better, so from now I will focus more on this.
+The new fitting module also supports new JSON structure, and makes sure to parse its information correctly, aiming to limit user-errors. So now the idea is to have 2 ways of input: either through in-script `JSON` structures, or through an external `JSON` file. This will be expressed in the next week.
 
 ### 3. Non-LTE benchmarking
 
