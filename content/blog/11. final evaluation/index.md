@@ -1,6 +1,6 @@
 ---
 title: Final Evaluation - A time to look back.
-date: "2022-09-05"
+date: "2022-09-12"
 description: It has been 5 months since I determined to nail GSoC, 4 months since I got selected into RADIS, and 3 months since I started coding intensively. Now, it's time for the grand finale.
 ---
 
