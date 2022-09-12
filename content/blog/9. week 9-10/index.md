@@ -24,7 +24,7 @@ After spending the whole week 9 finding a solution for Mr. Corentin's cases, at 
 
 After one week of despair, my new Macbook Air M1 finally arrived!
 
-[My new buddy!](./new_Mac.jpg)
+![My new buddy!](./new_Mac.jpg)
 
 Finally days and nights in extreme anxious of being unable to do anything while seeing my friends committing and pushing onto GitHub, have finally gone! Now I have my new Mac (with an exorbitant cost as Japanese Yen is dropping like my mental condition recently), and within the remaining days until the final evaluation, I will rush my best with all I have to deliver my module!
 
@@ -100,14 +100,14 @@ And so, I have acquired very good results:
 - Trot:             5751.19260 (init = 4000)
 - mole_fraction:    0.05501671 (init = 0.1)
 
-[Fit result of spectrum 1](./s1.png)
+![Fit result of spectrum 1](./s1.png)
 
 #### Spectrum 2:
 - Tvib:             4547.43903 (init = 6000)
 - Trot:             4073.50694 (init = 4000)
 - mole_fraction:    0.05939918 (init = 0.1)
 
-[Fit result of spectrum 2](./s2.png)
+![Fit result of spectrum 2](./s2.png)
 
 #### Spectrum 3:
 
@@ -115,7 +115,7 @@ And so, I have acquired very good results:
 - Trot:             2915.36318 (init = 4000)
 - mole_fraction:    0.07739941 (init = 0.05)
 
-[Fit result of spectrum 3](./s3.png)
+![Fit result of spectrum 3](./s3.png)
 
 #### Spectrum 4:
 
@@ -123,4 +123,4 @@ And so, I have acquired very good results:
 - Trot:             4728.52960 (init = 4000)
 - mole_fraction:    0.07008355 (init = 0.05)
 
-[Fit result of spectrum 4](./s4.png)
+![Fit result of spectrum 4](./s4.png)

@@ -80,4 +80,4 @@ A benchmarking example which compares performance between different [LMFIT fitti
 ||---------------------------||---------------------------||-------||
 ````
 
-[Method benchmarking result.](./method_compare_result.png)
+![Method benchmarking result.](./method_compare_result.png)
