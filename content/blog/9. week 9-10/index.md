@@ -24,7 +24,7 @@ After spending the whole week 9 finding a solution for Mr. Corentin's cases, at 
 
 After one week of despair, my new Macbook Air M1 finally arrived!
 
-![My new buddy!](./new_Mac.jpg)
+![My new buddy!](./new_Mac.jpeg)
 
 Finally days and nights in extreme anxious of being unable to do anything while seeing my friends committing and pushing onto GitHub, have finally gone! Now I have my new Mac (with an exorbitant cost as Japanese Yen is dropping like my mental condition recently), and within the remaining days until the final evaluation, I will rush my best with all I have to deliver my module!
 
